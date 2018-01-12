@@ -1,4 +1,3 @@
-#import azure_blob_helper
 import os 
 import numpy as np
 import tensorflow as tf
