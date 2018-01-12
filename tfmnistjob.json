@@ -1,0 +1,24 @@
+{
+	"apiVersion": "tensorflow.org/v1alpha1",
+	"kind": "TfJob",
+	"metadata": {
+		"name": "tfjob-gpu-sample"
+	},
+	"spec": {
+		"replicaSpecs": [
+			{
+				"template": {
+					"spec": {
+						"containers": [
+							{
+								"image": "submod/gputest:latest",
+								"name": "tensorflow"
+							}
+						],
+						"restartPolicy": "OnFailure"
+					}
+				}
+			}
+		]
+	}
+}

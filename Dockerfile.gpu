@@ -1,0 +1,13 @@
+FROM submod/neural-style-gpu-s2i
+
+USER root
+RUN pip install scipy Pillow Flask tensorflow tensorflow-serving-api waitress
+
+COPY ./ /app
+ADD entry.sh /app/
+RUN chmod a+x /app/entry.sh
+
+EXPOSE 80
+
+ENTRYPOINT ["/app/entry.sh"]
+USER 1001
