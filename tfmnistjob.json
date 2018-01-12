@@ -2,7 +2,7 @@
 	"apiVersion": "tensorflow.org/v1alpha1",
 	"kind": "TfJob",
 	"metadata": {
-		"name": "tfjob-gpu-sample"
+		"name": "tfjob-gpu"
 	},
 	"spec": {
 		"replicaSpecs": [
@@ -11,8 +11,13 @@
 					"spec": {
 						"containers": [
 							{
-								"image": "submod/gputest:latest",
-								"name": "tensorflow"
+								"image": "submod/gputest1:latest",
+								"name": "tensorflow",
+								"resources": {
+									"requests": {
+										"alpha.kubernetes.io/nvidia-gpu": 1
+									}
+								}
 							}
 						],
 						"restartPolicy": "OnFailure"
@@ -20,5 +25,6 @@
 				}
 			}
 		]
-	}
+	},
+        "tfImage": "submod/gputest1:latest"
 }
