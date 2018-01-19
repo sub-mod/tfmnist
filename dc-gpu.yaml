@@ -1,0 +1,73 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: test-gpu
+  annotations:
+    description: test gpu
+    tags: test-gpu
+objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}"
+    labels:
+      appid: test-gpu-app-${APPLICATION_NAME}
+  spec:
+    tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: "${GPU_IMAGE}"
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}"
+    labels:
+      appid: test-gpu-app-${APPLICATION_NAME}
+  spec:
+    strategy:
+      type: Rolling
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${APPLICATION_NAME}"
+        from:
+          kind: ImageStreamTag
+          name: "${APPLICATION_NAME}:latest"
+    replicas: 1
+    selector:
+      deploymentconfig: "${APPLICATION_NAME}"
+    template:
+      metadata:
+        labels:
+          appid: test-gpu-app-${APPLICATION_NAME}
+          deploymentconfig: "${APPLICATION_NAME}"
+      spec:
+        containers:
+        - name: "${APPLICATION_NAME}"
+          image: "${APPLICATION_NAME}:latest"
+          resources:
+            limits:
+              alpha.kubernetes.io/nvidia-gpu: "${GPU_LIMITS}"
+          ports:
+          - containerPort: 8888
+            protocol: TCP
+parameters:
+- name: APPLICATION_NAME
+  description: The name of the application.
+  value: test-gpu-app
+  from: "[a-zA-Z0-9]{10}"
+  required: true
+- name: GPU_IMAGE
+  description: test-gpu image
+  value: submod/gputest1
+  from: "[a-zA-Z0-9]{10}"
+  required: true
+- name: GPU_LIMITS
+  description: Number of GPUs to allocate
+  value: '1'
+  required: true
