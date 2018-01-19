@@ -12,6 +12,6 @@ spec:
       - name: tensorflow
         image: submod/gputest1:latest
         resources:
-          requests:
+          limits:
             alpha.kubernetes.io/nvidia-gpu: 1 
 
