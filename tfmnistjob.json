@@ -14,7 +14,7 @@
 								"image": "submod/gputest1:latest",
 								"name": "tensorflow",
 								"resources": {
-									"requests": {
+									"limits": {
 										"alpha.kubernetes.io/nvidia-gpu": 1
 									}
 								}
