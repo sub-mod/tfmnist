@@ -1,0 +1,17 @@
+---
+apiVersion: tensorflow.org/v1alpha1
+kind: TfJob
+metadata:
+  name: tfjob-gpu
+spec:
+  replicaSpecs:
+  - template:
+      spec:
+        containers:
+        - image: submod/gputest:latest
+          name: tensorflow
+          resources:
+            limits:
+              alpha.kubernetes.io/nvidia-gpu: 1
+        restartPolicy: OnFailure
+tfImage: submod/gputest:latest
